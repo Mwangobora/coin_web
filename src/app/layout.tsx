@@ -2,11 +2,11 @@ import "./globals.css";
 
 import type { Metadata } from "next";
 
-import { AppProviders } from "@/providers/app-providers";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "Charge Link",
-  description: "Public QR charging for mobile phones.",
+  title: "Smart Charging System",
+  description: "Public QR access for mobile phone charging.",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AppProviders>{children}</AppProviders>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { env } from "@/lib/env";
+import { env } from "@/lib/config/env";
 
 import { mapPublicApiError } from "./api-error";
 

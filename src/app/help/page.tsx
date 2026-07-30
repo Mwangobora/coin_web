@@ -1,6 +1,7 @@
 import { Coins, HelpCircle } from "lucide-react";
 
-import { CustomerShell } from "@/features/public-charging/components/customer-shell";
+import { CustomerHeader } from "@/components/layout/customer-header";
+import { PageContainer } from "@/components/layout/page-container";
 
 const sections = [
   ["How to scan the QR", "Open your phone camera and tap the charging link."],
@@ -8,28 +9,26 @@ const sections = [
     "How to select a package",
     "Choose one charging time. The price cannot be edited.",
   ],
-  ["How to make payment", "Start mobile money payment and keep this tab open."],
   [
-    "How to use the locker PIN",
-    "Enter the four-digit PIN on the machine keypad.",
+    "When payment appears",
+    "Payment will be connected in the next phase of this customer website.",
   ],
   [
     "How to connect the phone",
-    "Put your phone inside the locker and connect the cable.",
+    "After payment is added, the charger will guide locker deposit steps.",
   ],
-  ["How to collect the phone", "Return and enter the same PIN saved earlier."],
   [
-    "Payment stays pending",
-    "Wait a little, then ask support if it does not change.",
+    "Device is offline",
+    "Use another available charging machine or ask station support.",
   ],
-  ["Device is offline", "Use another charger or coin payment if available."],
-  ["Locker does not open", "Do not force it. Ask the station support contact."],
+  ["No locker is available", "Wait for another customer to collect a phone."],
   ["Support contact", "Support phone placeholder: +255 000 000 000."],
 ];
 
 export default function HelpPage() {
   return (
-    <CustomerShell>
+    <PageContainer>
+      <CustomerHeader />
       <section className="grid gap-4">
         <div className="rounded-lg bg-card p-5 shadow-sm">
           <HelpCircle className="mb-3 text-primary" size={32} />
@@ -56,6 +55,6 @@ export default function HelpPage() {
           </p>
         </div>
       </section>
-    </CustomerShell>
+    </PageContainer>
   );
 }

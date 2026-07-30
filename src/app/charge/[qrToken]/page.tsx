@@ -1,5 +1,4 @@
-import { CustomerShell } from "@/features/public-charging/components/customer-shell";
-import { QrEntryPage } from "@/features/public-charging/components/qr-entry-page";
+import { QrDevicePage } from "@/features/qr-resolution/components/qr-device-page";
 
 export default async function ChargePage({
   params,
@@ -7,9 +6,5 @@ export default async function ChargePage({
   params: Promise<{ qrToken: string }>;
 }) {
   const { qrToken } = await params;
-  return (
-    <CustomerShell>
-      <QrEntryPage qrToken={qrToken} />
-    </CustomerShell>
-  );
+  return <QrDevicePage qrToken={qrToken} />;
 }

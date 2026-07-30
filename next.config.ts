@@ -12,10 +12,6 @@ const nextConfig: NextConfig = {
           { key: "Permissions-Policy", value: "camera=(), microphone=()" },
         ],
       },
-      {
-        source: "/session/:sessionReference",
-        headers: [{ key: "Cache-Control", value: "no-store" }],
-      },
     ];
   },
 };
