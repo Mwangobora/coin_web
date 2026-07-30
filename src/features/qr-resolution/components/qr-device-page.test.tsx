@@ -75,6 +75,33 @@ test("network failures display a retry action", () => {
   expect(screen.getByRole("button", { name: /try again/i })).toBeVisible();
 });
 
+test("loading state displays a skeleton instead of a blank page", () => {
+  mocks.useQrResolution.mockReturnValue({
+    data: undefined,
+    error: null,
+    isError: false,
+    isLoading: true,
+    isTokenValid: true,
+    refetch: vi.fn(),
+  });
+
+  render(<QrDevicePage qrToken="DEMO-CHARGER-ONLINE" />);
+
+  expect(screen.getByText("Loading charger availability")).toBeInTheDocument();
+  expect(screen.getByText(/checking machine status/i)).toBeInTheDocument();
+});
+
+test("status information is explained without relying only on color", () => {
+  mocks.useQrResolution.mockReturnValue(successState(baseResponse()));
+
+  render(<QrDevicePage qrToken="DEMO-CHARGER-ONLINE" />);
+
+  expect(screen.getByText(/select your charging time/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(/charging lockers are available/i),
+  ).toBeInTheDocument();
+});
+
 test("malformed route token is rejected before rendering charger data", () => {
   mocks.useQrResolution.mockReturnValue({
     data: undefined,

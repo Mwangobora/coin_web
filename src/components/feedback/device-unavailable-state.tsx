@@ -9,7 +9,7 @@ export function DeviceUnavailableState({
 }) {
   if (state === "available" || state === "limited") return null;
   return (
-    <div className="rounded-lg border border-warning/40 bg-yellow-50 p-4 text-sm text-warning-foreground">
+    <div className="rounded-2xl border border-warning/40 bg-yellow-50 p-4 text-sm leading-6 text-warning-foreground shadow-sm">
       <p className="flex items-center gap-2 font-bold">
         <AlertCircle size={18} /> {titleFor(state)}
       </p>

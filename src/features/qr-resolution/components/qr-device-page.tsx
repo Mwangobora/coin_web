@@ -49,6 +49,7 @@ export function QrDevicePage({ qrToken }: { qrToken: string }) {
 
   const state = getCustomerDeviceState(data);
   const packageDisabled = !canSelectPackage(state);
+  const statusMessage = messageForDeviceState(state);
 
   return (
     <Shell>
@@ -58,17 +59,22 @@ export function QrDevicePage({ qrToken }: { qrToken: string }) {
         className="grid gap-5"
       >
         <StationSummaryCard data={data} />
-        <section className="rounded-lg border bg-card p-4">
+        <section className="rounded-2xl border bg-card p-4 shadow-sm">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <p className="text-sm text-muted-foreground">Machine status</p>
-              <h2 className="mt-1 text-lg font-black">{data.device.name}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h2 className="mt-1 break-words text-lg font-black">
+                {data.device.name}
+              </h2>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
                 {data.device.publicCode} · {data.device.connectivityStatus}
               </p>
             </div>
             <DeviceStatusBadge state={state} />
           </div>
+          <p className="mt-4 rounded-xl bg-muted p-3 text-sm font-semibold leading-6">
+            {statusMessage}
+          </p>
         </section>
         <AvailabilityCard
           availableLockers={data.availability.availableLockers}
@@ -79,6 +85,7 @@ export function QrDevicePage({ qrToken }: { qrToken: string }) {
         <PackageSelectionList
           packages={data.packages}
           disabled={packageDisabled}
+          disabledReason={packageDisabled ? statusMessage : undefined}
         />
       </motion.div>
     </Shell>
@@ -92,4 +99,18 @@ function Shell({ children }: { children: React.ReactNode }) {
       {children}
     </PageContainer>
   );
+}
+
+function messageForDeviceState(
+  state: ReturnType<typeof getCustomerDeviceState>,
+) {
+  const messages = {
+    available: "This charging machine is ready. Select your charging time.",
+    limited: "A few lockers are available. Select your charging time now.",
+    busy: "All lockers are currently occupied.",
+    offline: "This charging machine is currently offline.",
+    maintenance: "This machine is temporarily under maintenance.",
+    fault: "This machine needs attention before it can charge phones.",
+  };
+  return messages[state];
 }

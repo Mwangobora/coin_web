@@ -10,12 +10,12 @@ const sections = [
     "Choose one charging time. The price cannot be edited.",
   ],
   [
-    "When payment appears",
-    "Payment will be connected in the next phase of this customer website.",
+    "Make payment",
+    "After choosing time, follow the payment instructions shown on your phone.",
   ],
   [
-    "How to connect the phone",
-    "After payment is added, the charger will guide locker deposit steps.",
+    "Open your locker",
+    "Use the locker PIN shown after payment. Save it before continuing.",
   ],
   [
     "Device is offline",
@@ -30,26 +30,31 @@ export default function HelpPage() {
     <PageContainer>
       <CustomerHeader />
       <section className="grid gap-4">
-        <div className="rounded-lg bg-card p-5 shadow-sm">
+        <div className="rounded-2xl bg-card p-5 shadow-sm">
           <HelpCircle className="mb-3 text-primary" size={32} />
           <h1 className="text-3xl font-black">Help</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Quick steps for QR mobile charging.
+          <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            Quick steps for secure phone charging from the QR code.
           </p>
         </div>
         <div className="grid gap-3">
           {sections.map(([title, body]) => (
-            <article key={title} className="rounded-lg border bg-card p-4">
+            <article
+              key={title}
+              className="rounded-2xl border bg-card p-4 shadow-sm"
+            >
               <h2 className="font-bold">{title}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">{body}</p>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                {body}
+              </p>
             </article>
           ))}
         </div>
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+        <div className="rounded-2xl border border-blue-200 bg-blue-50 p-4">
           <p className="flex items-center gap-2 font-bold text-blue-900">
             <Coins size={18} /> Coin payment
           </p>
-          <p className="mt-2 text-sm text-blue-900">
+          <p className="mt-2 text-sm leading-6 text-blue-900">
             Coin users do not need this web application. Insert the supported
             coin directly into the machine and follow the LCD instructions.
           </p>

@@ -5,7 +5,7 @@ export function DeviceStatusBadge({ state }: { state: CustomerDeviceState }) {
   return (
     <span
       className={cn(
-        "inline-flex min-h-8 items-center rounded-full px-3 text-sm font-bold",
+        "inline-flex min-h-8 items-center rounded-full px-3 text-sm font-bold shadow-sm",
         classNameFor(state),
       )}
     >

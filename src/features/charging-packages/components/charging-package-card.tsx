@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, Clock3, Sparkles } from "lucide-react";
+import { motion } from "motion/react";
 
 import {
   formatDuration,
@@ -22,15 +23,16 @@ export function ChargingPackageCard({
   onSelect: () => void;
 }) {
   return (
-    <button
+    <motion.button
       type="button"
       aria-pressed={selected}
       disabled={disabled}
       onClick={onSelect}
+      whileTap={disabled ? undefined : { scale: 0.99 }}
       className={cn(
-        "w-full rounded-lg border bg-card p-4 text-left shadow-sm transition",
+        "min-h-32 w-full rounded-2xl border bg-card p-4 text-left shadow-sm transition",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        selected && "border-primary ring-2 ring-primary/20",
+        selected && "border-primary bg-blue-50 ring-2 ring-primary/20",
         disabled && "cursor-not-allowed opacity-55",
         !disabled && "hover:border-primary hover:shadow-md",
       )}
@@ -45,7 +47,9 @@ export function ChargingPackageCard({
           ) : null}
         </span>
         {selected ? (
-          <CheckCircle2 className="shrink-0 text-primary" size={23} />
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-xs font-black text-white">
+            <CheckCircle2 size={15} /> Selected
+          </span>
         ) : null}
       </span>
       <span className="mt-4 flex items-end justify-between gap-3">
@@ -61,6 +65,6 @@ export function ChargingPackageCard({
       <span className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
         <Clock3 size={16} /> {formatDuration(item.durationSeconds)}
       </span>
-    </button>
+    </motion.button>
   );
 }

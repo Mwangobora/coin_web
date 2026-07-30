@@ -22,12 +22,19 @@ test("package cards render and allow one selected package", async () => {
 });
 
 test("disabled packages cannot be selected or continued", () => {
-  render(<PackageSelectionList packages={packages} disabled />);
+  render(
+    <PackageSelectionList
+      packages={packages}
+      disabled
+      disabledReason="This charging machine is currently offline."
+    />,
+  );
 
   expect(screen.getByRole("button", { name: /quick charge/i })).toBeDisabled();
   expect(
     screen.getByRole("button", { name: /continue to payment/i }),
   ).toBeDisabled();
+  expect(screen.getByText(/currently offline/i)).toBeInTheDocument();
 });
 
 const packages: ChargingPackage[] = [
