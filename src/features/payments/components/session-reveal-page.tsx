@@ -34,7 +34,9 @@ export function SessionRevealPage({
   sessionReference: string;
 }) {
   const router = useRouter();
-  const flowToken = useStorageValue(() => readSessionFlowToken(sessionReference));
+  const flowToken = useStorageValue(() =>
+    readSessionFlowToken(sessionReference),
+  );
   const claimFromStorage = useStorageValue(() =>
     readAccessCodeClaim(sessionReference),
   );
@@ -42,7 +44,8 @@ export function SessionRevealPage({
   const claimAccessCode = useClaimAccessCode();
   const hasRequestedClaim = useRef(false);
 
-  const storageChecked = flowToken !== undefined && claimFromStorage !== undefined;
+  const storageChecked =
+    flowToken !== undefined && claimFromStorage !== undefined;
   const claim = freshClaim ?? claimFromStorage ?? null;
 
   useEffect(() => {
@@ -197,7 +200,8 @@ function guidanceMessage(guidance: string) {
     enter_access_code: "Enter the code above on the charging machine keypad.",
     connect_phone: "Place your phone inside the assigned locker.",
     charging: "Your phone is charging. Keep the locker closed.",
-    collect_phone: "Charging is complete. Open the locker and collect your phone.",
+    collect_phone:
+      "Charging is complete. Open the locker and collect your phone.",
     session_finished: "This charging session has ended.",
     device_error: "This machine needs attention before it can continue.",
   };

@@ -1,4 +1,5 @@
 import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { expect, test, vi } from "vitest";
 
 import { render } from "@/test/test-utils";
@@ -16,54 +17,52 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
 
-test("QR route displays resolved station and device information", () => {
+test("QR route starts package selection without showing station details", async () => {
   mocks.useQrResolution.mockReturnValue(successState(baseResponse()));
 
-  render(<QrDevicePage qrToken="DEMO-CHARGER-ONLINE" />);
+  render(<QrDevicePage qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ" />);
 
-  expect(screen.getByText("DIT Main Station")).toBeInTheDocument();
-  expect(screen.getAllByText(/Smart Mobile Charger/i).length).toBeGreaterThan(
-    0,
+  expect(screen.queryByText("DIT Main Station")).not.toBeInTheDocument();
+  expect(screen.queryByText(/Smart Mobile Charger/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/CHARGER-001/i)).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /start charging/i })).toBeEnabled();
+
+  await userEvent.click(
+    screen.getByRole("button", { name: /start charging/i }),
   );
-  expect(screen.getAllByText(/CHARGER-001/i).length).toBeGreaterThan(0);
-  expect(screen.getByText("Lockers available")).toBeInTheDocument();
-  expect(screen.getByText("Ports available")).toBeInTheDocument();
+
   expect(screen.getByText("Quick Charge")).toBeInTheDocument();
+  expect(screen.getByText("Standard Charge")).toBeInTheDocument();
 });
 
-test("offline devices disable package selection", () => {
+test("offline device data does not block customer payment testing", async () => {
   mocks.useQrResolution.mockReturnValue(
     successState(baseResponse({ connectivityStatus: "offline" })),
   );
 
-  render(<QrDevicePage qrToken="DEMO-CHARGER-OFFLINE" />);
+  render(<QrDevicePage qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ" />);
 
-  expect(screen.getByText("Machine offline")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /quick charge/i })).toBeDisabled();
-});
+  expect(screen.queryByText(/offline/i)).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /start charging/i })).toBeEnabled();
 
-test("maintenance devices disable package selection", () => {
-  mocks.useQrResolution.mockReturnValue(
-    successState(baseResponse({ status: "maintenance" })),
+  await userEvent.click(
+    screen.getByRole("button", { name: /start charging/i }),
   );
 
-  render(<QrDevicePage qrToken="DEMO-CHARGER-MAINTENANCE" />);
-
-  expect(screen.getByText("Under maintenance")).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /quick charge/i })).toBeDisabled();
+  expect(screen.getByText("Quick Charge")).toBeInTheDocument();
+  expect(screen.getByText("Standard Charge")).toBeInTheDocument();
 });
 
-test("no available locker disables continuation", () => {
-  mocks.useQrResolution.mockReturnValue(
-    successState(baseResponse({}, { availableLockers: 0 })),
+test("auto start opens package choices immediately for homepage testing", () => {
+  mocks.useQrResolution.mockReturnValue(successState(baseResponse()));
+
+  render(
+    <QrDevicePage qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ" autoStart />,
   );
 
-  render(<QrDevicePage qrToken="DEMO-CHARGER-ONLINE" />);
-
-  expect(screen.getByText("No charging slots")).toBeInTheDocument();
-  expect(
-    screen.getByRole("button", { name: /continue to payment/i }),
-  ).toBeDisabled();
+  expect(screen.queryByRole("button", { name: /start charging/i })).toBeNull();
+  expect(screen.getByText("Quick Charge")).toBeInTheDocument();
+  expect(screen.getByText("Standard Charge")).toBeInTheDocument();
 });
 
 test("network failures display a retry action", () => {
@@ -76,7 +75,7 @@ test("network failures display a retry action", () => {
     refetch: vi.fn(),
   });
 
-  render(<QrDevicePage qrToken="DEMO-CHARGER-ONLINE" />);
+  render(<QrDevicePage qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ" />);
 
   expect(screen.getByRole("button", { name: /try again/i })).toBeVisible();
 });
@@ -91,21 +90,19 @@ test("loading state displays a skeleton instead of a blank page", () => {
     refetch: vi.fn(),
   });
 
-  render(<QrDevicePage qrToken="DEMO-CHARGER-ONLINE" />);
+  render(<QrDevicePage qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ" />);
 
   expect(screen.getByText("Loading charger availability")).toBeInTheDocument();
   expect(screen.getByText(/checking machine status/i)).toBeInTheDocument();
 });
 
-test("status information is explained without relying only on color", () => {
+test("customer flow explains the payment test without device status noise", () => {
   mocks.useQrResolution.mockReturnValue(successState(baseResponse()));
 
-  render(<QrDevicePage qrToken="DEMO-CHARGER-ONLINE" />);
+  render(<QrDevicePage qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ" />);
 
-  expect(screen.getByText(/select your charging time/i)).toBeInTheDocument();
-  expect(
-    screen.getByText(/charging lockers are available/i),
-  ).toBeInTheDocument();
+  expect(screen.getByText(/choose TZS 200 or TZS 500/i)).toBeInTheDocument();
+  expect(screen.queryByText(/machine status/i)).not.toBeInTheDocument();
 });
 
 test("malformed route token is rejected before rendering charger data", () => {
@@ -150,13 +147,22 @@ function baseResponse(
     availability: { availableLockers: 2, availablePorts: 2, ...availability },
     packages: [
       {
-        publicPackageId: "QUICK-500",
+        publicPackageId: "QUICK-200",
         name: "Quick Charge",
         description: "Short top up",
+        priceMinor: "200",
+        currency: "TZS",
+        durationSeconds: 900,
+        displayOrder: 1,
+      },
+      {
+        publicPackageId: "STANDARD-500",
+        name: "Standard Charge",
+        description: "Longer charging time",
         priceMinor: "500",
         currency: "TZS",
-        durationSeconds: 1800,
-        displayOrder: 1,
+        durationSeconds: 2700,
+        displayOrder: 2,
       },
     ],
     checkoutToken: "temporary-token",

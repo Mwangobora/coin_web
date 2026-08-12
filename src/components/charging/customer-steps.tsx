@@ -4,16 +4,15 @@ import { cn } from "@/lib/utils";
 
 const steps = [
   "Select package",
-  "Make payment",
-  "Open locker",
-  "Charge phone",
-  "Collect phone",
+  "Choose Fake Money",
+  "Tap Pay",
+  "Payment accepted",
 ];
 
 export function CustomerSteps({ currentStep = 0 }: { currentStep?: number }) {
   return (
     <ol
-      className="grid grid-cols-5 gap-1 rounded-2xl border bg-card p-2 shadow-sm"
+      className="grid grid-cols-4 gap-1 rounded-2xl border bg-card p-2 shadow-sm"
       aria-label="Charging progress"
     >
       {steps.map((step, index) => (

@@ -22,5 +22,8 @@ export function formatCountdown(totalSeconds: number) {
 
 function remaining(targetIso?: string | null) {
   if (!targetIso) return 0;
-  return Math.max(0, Math.round((new Date(targetIso).getTime() - Date.now()) / 1000));
+  return Math.max(
+    0,
+    Math.round((new Date(targetIso).getTime() - Date.now()) / 1000),
+  );
 }

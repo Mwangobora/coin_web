@@ -13,7 +13,9 @@ test("mock mode does not call the remote API", async () => {
   vi.doMock("@/lib/api/api-client", () => ({ apiClient: { post } }));
 
   const { resolveChargingQr } = await import("./qr-resolution.repository");
-  const result = await resolveChargingQr("DEMO-CHARGER-ONLINE");
+  const result = await resolveChargingQr(
+    "cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ",
+  );
 
   expect(result.station.name).toBe("DIT Main Station");
   expect(post).not.toHaveBeenCalled();

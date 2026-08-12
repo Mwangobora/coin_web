@@ -14,7 +14,7 @@ vi.mock("next/navigation", () => ({
 test("package cards render and allow one selected package", async () => {
   render(
     <PackageSelectionList
-      qrToken="DEMO-CHARGER-ONLINE"
+      qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ"
       checkoutToken="mock-checkout-token"
       packages={packages}
       disabled={false}
@@ -24,20 +24,30 @@ test("package cards render and allow one selected package", async () => {
   const quick = screen.getByRole("button", { name: /quick charge/i });
   const standard = screen.getByRole("button", { name: /standard charge/i });
 
+  expect(screen.getByText("TZS 200")).toBeInTheDocument();
   expect(screen.getByText("TZS 500")).toBeInTheDocument();
-  expect(screen.getByText("TZS 1,000")).toBeInTheDocument();
-  expect(quick).toHaveAttribute("aria-pressed", "true");
+  expect(
+    screen.getByRole("button", { name: /select charging time/i }),
+  ).toBeDisabled();
 
   await userEvent.click(standard);
 
   expect(quick).toHaveAttribute("aria-pressed", "false");
   expect(standard).toHaveAttribute("aria-pressed", "true");
+  expect(screen.getByRole("button", { name: /fake money/i })).toBeVisible();
+  expect(
+    screen.getByRole("button", { name: /select payment method/i }),
+  ).toBeDisabled();
+
+  await userEvent.click(screen.getByRole("button", { name: /fake money/i }));
+
+  expect(screen.getByRole("button", { name: /pay tzs 500/i })).toBeEnabled();
 });
 
 test("disabled packages cannot be selected or continued", () => {
   render(
     <PackageSelectionList
-      qrToken="DEMO-CHARGER-ONLINE"
+      qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ"
       checkoutToken="mock-checkout-token"
       packages={packages}
       disabled
@@ -47,29 +57,29 @@ test("disabled packages cannot be selected or continued", () => {
 
   expect(screen.getByRole("button", { name: /quick charge/i })).toBeDisabled();
   expect(
-    screen.getByRole("button", { name: /continue to payment/i }),
+    screen.getByRole("button", { name: /select charging time/i }),
   ).toBeDisabled();
   expect(screen.getByText(/currently offline/i)).toBeInTheDocument();
 });
 
 const packages: ChargingPackage[] = [
   {
-    publicPackageId: "QUICK-500",
+    publicPackageId: "QUICK-200",
     name: "Quick Charge",
     description: "Short top up",
-    priceMinor: "500",
+    priceMinor: "200",
     currency: "TZS",
-    durationSeconds: 1800,
+    durationSeconds: 900,
     displayOrder: 1,
-    recommended: true,
   },
   {
-    publicPackageId: "STANDARD-1000",
+    publicPackageId: "STANDARD-500",
     name: "Standard Charge",
     description: "Longer charge",
-    priceMinor: "1000",
+    priceMinor: "500",
     currency: "TZS",
-    durationSeconds: 3600,
+    durationSeconds: 2700,
     displayOrder: 2,
+    recommended: true,
   },
 ];

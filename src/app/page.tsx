@@ -8,9 +8,12 @@ import { Button } from "@/components/ui/button";
 const steps = [
   "Scan the QR code on the machine.",
   "Choose how long you want to charge.",
-  "Pay and get your locker PIN.",
-  "Collect your phone when charging is complete.",
+  "Select Fake Money and tap Pay.",
+  "Payment accepted. Charging starts.",
 ];
+
+const permanentChargePath =
+  "/charge/cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ?start=1";
 
 export default function HomePage() {
   return (
@@ -27,18 +30,16 @@ export default function HomePage() {
             <p className="text-sm font-bold text-orange-200">
               Charge your phone securely
             </p>
-            <h1 className="mt-2 text-3xl fon
-            -black leading-tight lg:text-5xl">
-             Mobile phone Charging System
+            <h1 className="mt-2 text-3xl font-black leading-tight lg:text-5xl">
+              Mobile phone Charging System
             </h1>
-
 
             <p className="mt-3 text-base leading-7 text-orange-100">
               Scan the QR code on the charging machine, choose your charging
               time, and pay from your phone.
             </p>
             <Button asChild className="mt-6 w-full lg:w-auto" size="lg">
-              <Link href="/charge/DEMO-CHARGER-ONLINE">
+              <Link href={permanentChargePath}>
                 Start charging <ArrowRight size={19} />
               </Link>
             </Button>

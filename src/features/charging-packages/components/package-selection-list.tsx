@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard } from "lucide-react";
+import { Banknote, CheckCircle2, CreditCard } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -28,18 +28,19 @@ export function PackageSelectionList({
   disabledReason?: string;
 }) {
   const router = useRouter();
-  const [selectedId, setSelectedId] = useState(packages[0]?.publicPackageId);
+  const [selectedId, setSelectedId] = useState<string>();
+  const [paymentMethod, setPaymentMethod] = useState<"fake-money" | null>(null);
   const [idempotencyKey] = useState(() => crypto.randomUUID());
   const initiatePayment = useInitiatePayment();
   const selected = packages.find((item) => item.publicPackageId === selectedId);
 
   const handlePay = () => {
-    if (!selected) return;
+    if (!selected || !paymentMethod) return;
     initiatePayment.mutate(
       { checkoutToken, packageId: selected.publicPackageId, idempotencyKey },
       {
         onSuccess: (initiation) => {
-          saveCheckoutFlow(initiation);
+          saveCheckoutFlow({ ...initiation, provider: "fake-money" });
           router.push(`/charge/${qrToken}/pay/${initiation.paymentReference}`);
         },
         onError: (error) => {
@@ -81,11 +82,37 @@ export function PackageSelectionList({
             disabled={disabled}
             onSelect={() => {
               setSelectedId(item.publicPackageId);
+              setPaymentMethod(null);
               toast.success(`${item.name} selected.`);
             }}
           />
         ))}
       </div>
+      {selected ? (
+        <section className="rounded-2xl border bg-card p-4 shadow-sm">
+          <h3 className="text-lg font-black">Select payment method</h3>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
+            Use Fake Money for this test flow. No real money is charged.
+          </p>
+          <button
+            type="button"
+            aria-pressed={paymentMethod === "fake-money"}
+            onClick={() => {
+              setPaymentMethod("fake-money");
+              toast.success("Fake Money selected.");
+            }}
+            className="mt-3 flex min-h-14 w-full items-center justify-between rounded-xl border bg-muted px-4 text-left text-sm font-bold transition hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >
+            <span className="flex items-center gap-3">
+              <Banknote className="text-primary" size={20} />
+              Fake Money
+            </span>
+            {paymentMethod === "fake-money" ? (
+              <CheckCircle2 className="text-primary" size={20} />
+            ) : null}
+          </button>
+        </section>
+      ) : null}
       <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 px-3 py-3 shadow-[0_-10px_30px_rgba(15,23,42,0.12)] backdrop-blur supports-[padding:max(0px)]:pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:static sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:shadow-none sm:backdrop-blur-none">
         <div className="mx-auto max-w-xl sm:max-w-none">
           {disabled && disabledReason ? (
@@ -94,16 +121,23 @@ export function PackageSelectionList({
             </p>
           ) : null}
           <PrimaryCustomerButton
-            disabled={disabled || !selectedId || initiatePayment.isPending}
+            disabled={
+              disabled ||
+              !selectedId ||
+              !paymentMethod ||
+              initiatePayment.isPending
+            }
             onClick={handlePay}
             className="shadow-lg shadow-primary/25"
           >
             <CreditCard size={20} />
             {initiatePayment.isPending
-              ? "Creating payment request..."
-              : selected
-                ? `Continue to payment · ${formatMoney(selected.priceMinor, selected.currency)}`
-                : "Continue to payment"}
+              ? "Processing Fake Money..."
+              : selected && paymentMethod
+                ? `Pay ${formatMoney(selected.priceMinor, selected.currency)}`
+                : selected
+                  ? "Select payment method"
+                  : "Select charging time"}
           </PrimaryCustomerButton>
         </div>
       </div>

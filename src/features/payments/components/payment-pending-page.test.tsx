@@ -30,7 +30,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-test("shows the amount, QR payload, and merchant reference while pending", async () => {
+test("shows fake money processing while pending", async () => {
   saveCheckoutFlow(initiation());
   mocks.usePaymentStatus.mockReturnValue({
     data: { status: "pending" },
@@ -38,17 +38,19 @@ test("shows the amount, QR payload, and merchant reference while pending", async
   });
 
   render(
-    <PaymentPendingPage qrToken="DEMO-CHARGER-ONLINE" paymentReference="PAY-1" />,
+    <PaymentPendingPage
+      qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ"
+      paymentReference="PAY-1"
+    />,
   );
 
   expect(await screen.findByText("TZS 200")).toBeInTheDocument();
-  expect(screen.getByText("QR-PAY-1")).toBeInTheDocument();
   expect(
-    screen.getByText(/waiting for your payment to be confirmed/i),
+    screen.getByText(/processing fake money payment/i),
   ).toBeInTheDocument();
 });
 
-test("redirects to the session page once payment is confirmed", async () => {
+test("shows accepted message once payment is confirmed", async () => {
   saveCheckoutFlow(initiation());
   mocks.usePaymentStatus.mockReturnValue({
     data: { status: "confirmed", sessionReference: "SESSION-1" },
@@ -56,19 +58,25 @@ test("redirects to the session page once payment is confirmed", async () => {
   });
 
   render(
-    <PaymentPendingPage qrToken="DEMO-CHARGER-ONLINE" paymentReference="PAY-1" />,
+    <PaymentPendingPage
+      qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ"
+      paymentReference="PAY-1"
+    />,
   );
 
-  expect(mocks.replace).toHaveBeenCalledWith(
-    "/charge/DEMO-CHARGER-ONLINE/session/SESSION-1",
-  );
+  expect(screen.getByText(/payment accepted/i)).toBeInTheDocument();
+  expect(screen.getByText(/fake money payment received/i)).toBeInTheDocument();
+  expect(mocks.replace).not.toHaveBeenCalled();
 });
 
 test("shows an error when no payment session exists on this device", async () => {
   mocks.usePaymentStatus.mockReturnValue({ data: undefined, isError: false });
 
   render(
-    <PaymentPendingPage qrToken="DEMO-CHARGER-ONLINE" paymentReference="PAY-1" />,
+    <PaymentPendingPage
+      qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ"
+      paymentReference="PAY-1"
+    />,
   );
 
   expect(
@@ -82,7 +90,7 @@ function initiation(): PaymentInitiation {
     merchantReference: "QR-PAY-1",
     amountMinor: "200",
     currency: "TZS",
-    provider: "mock",
+    provider: "fake-money",
     paymentInstructions: { qrReference: "mock://pay/PAY-1" },
     status: "pending",
     expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),

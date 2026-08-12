@@ -1,10 +1,8 @@
 "use client";
 
-import { LoaderCircle, QrCode, TriangleAlert } from "lucide-react";
+import { CheckCircle2, LoaderCircle, TriangleAlert } from "lucide-react";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
-import { QRCodeSVG } from "qrcode.react";
-import { useEffect } from "react";
 
 import { ErrorState } from "@/components/feedback/error-state";
 import { LoadingState } from "@/components/feedback/loading-state";
@@ -12,7 +10,7 @@ import { CustomerHeader } from "@/components/layout/customer-header";
 import { PageContainer } from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/formatters/charging-formatters";
-import { readCheckoutFlow, saveSessionFlowToken } from "@/lib/storage/checkout-storage";
+import { readCheckoutFlow } from "@/lib/storage/checkout-storage";
 import { useStorageValue } from "@/lib/storage/use-storage-value";
 
 import { formatCountdown, useCountdownSeconds } from "../hooks/use-countdown";
@@ -34,15 +32,6 @@ export function PaymentPendingPage({
   });
 
   const secondsLeft = useCountdownSeconds(flow?.initiation.expiresAt);
-
-  useEffect(() => {
-    if (status.data?.status === "confirmed" && status.data.sessionReference && flow) {
-      saveSessionFlowToken(status.data.sessionReference, flow.customerFlowToken);
-      router.replace(
-        `/charge/${qrToken}/session/${status.data.sessionReference}`,
-      );
-    }
-  }, [status.data, qrToken, router, flow]);
 
   if (flow === undefined) {
     return (
@@ -92,6 +81,7 @@ export function PaymentPendingPage({
   }
 
   const { initiation } = flow;
+  const isConfirmed = status.data?.status === "confirmed";
 
   return (
     <Shell>
@@ -110,33 +100,26 @@ export function PaymentPendingPage({
           </p>
         </div>
 
-        <section className="grid justify-items-center gap-4 rounded-2xl border bg-card p-5 text-center shadow-sm">
-          <p className="flex items-center gap-2 font-bold">
-            <QrCode size={18} /> Scan to pay with {providerLabel(initiation.provider)}
-          </p>
-          <div className="rounded-xl border bg-white p-3">
-            <QRCodeSVG
-              value={initiation.paymentInstructions.qrReference}
-              size={192}
-              level="M"
-            />
-          </div>
-          <p className="text-sm leading-6 text-muted-foreground">
-            Can&apos;t scan? Use your payment app&apos;s &ldquo;Enter
-            reference&rdquo; option with:
-          </p>
-          <p className="rounded-lg bg-muted px-3 py-2 font-mono text-sm font-bold break-all">
-            {initiation.merchantReference}
-          </p>
-        </section>
-
-        <section
-          className="flex items-center justify-center gap-3 rounded-2xl border bg-card p-4 text-sm font-semibold shadow-sm"
-          aria-live="polite"
-        >
-          <LoaderCircle className="animate-spin text-primary" size={18} />
-          Waiting for your payment to be confirmed...
-        </section>
+        {isConfirmed ? (
+          <section
+            className="grid justify-items-center gap-3 rounded-2xl border border-green-200 bg-green-50 p-5 text-center text-green-900 shadow-sm"
+            aria-live="polite"
+          >
+            <CheckCircle2 size={42} />
+            <h1 className="text-2xl font-black">Payment accepted</h1>
+            <p className="text-sm leading-6">
+              Fake Money payment received. Your charging request is confirmed.
+            </p>
+          </section>
+        ) : (
+          <section
+            className="flex items-center justify-center gap-3 rounded-2xl border bg-card p-4 text-sm font-semibold shadow-sm"
+            aria-live="polite"
+          >
+            <LoaderCircle className="animate-spin text-primary" size={18} />
+            Processing Fake Money payment...
+          </section>
+        )}
 
         {status.isError ? (
           <p className="flex items-center gap-2 text-center text-xs text-warning-foreground">
@@ -150,16 +133,11 @@ export function PaymentPendingPage({
           className="w-full"
           onClick={() => router.push(`/charge/${qrToken}`)}
         >
-          Cancel and choose again
+          {isConfirmed ? "Done" : "Cancel and choose again"}
         </Button>
       </motion.section>
     </Shell>
   );
-}
-
-function providerLabel(provider: string) {
-  if (provider === "mock") return "your payment app";
-  return provider.charAt(0).toUpperCase() + provider.slice(1);
 }
 
 function Shell({ children }: { children: React.ReactNode }) {

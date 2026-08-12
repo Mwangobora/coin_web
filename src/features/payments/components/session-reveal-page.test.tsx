@@ -46,7 +46,7 @@ test("shows the access code immediately when already claimed on this device", as
 
   render(
     <SessionRevealPage
-      qrToken="DEMO-CHARGER-ONLINE"
+      qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ"
       sessionReference="SESSION-1"
     />,
   );
@@ -61,7 +61,7 @@ test("shows an error when no session exists on this device", async () => {
 
   render(
     <SessionRevealPage
-      qrToken="DEMO-CHARGER-ONLINE"
+      qrToken="cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ"
       sessionReference="SESSION-1"
     />,
   );

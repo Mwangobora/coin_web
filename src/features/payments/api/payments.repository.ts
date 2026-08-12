@@ -43,7 +43,10 @@ export async function getPaymentStatus(input: {
 }) {
   if (env.NEXT_PUBLIC_USE_MOCK_API) {
     await delay();
-    return mockGetPaymentStatus(input.paymentReference, input.customerFlowToken);
+    return mockGetPaymentStatus(
+      input.paymentReference,
+      input.customerFlowToken,
+    );
   }
   try {
     const response = await apiClient.get(
@@ -82,7 +85,10 @@ export async function getSessionStatus(input: {
 }) {
   if (env.NEXT_PUBLIC_USE_MOCK_API) {
     await delay();
-    return mockGetSessionStatus(input.sessionReference, input.customerFlowToken);
+    return mockGetSessionStatus(
+      input.sessionReference,
+      input.customerFlowToken,
+    );
   }
   try {
     const response = await apiClient.get(

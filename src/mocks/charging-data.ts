@@ -23,7 +23,7 @@ const packages = [
 ];
 
 export const mockQrResponses: Record<string, QrResolution | null> = {
-  "DEMO-CHARGER-ONLINE": response("available", "online", 2, 2),
+  cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ: response("available", "online", 2, 2),
   "DEMO-CHARGER-OFFLINE": response("available", "offline", 2, 2),
   "DEMO-CHARGER-MAINTENANCE": response("maintenance", "online", 0, 0),
   "DEMO-INVALID": null,

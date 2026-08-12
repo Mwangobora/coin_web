@@ -29,11 +29,42 @@ secrets in `NEXT_PUBLIC_*` variables.
 ## Demonstration QR URLs
 
 ```text
-/charge/DEMO-CHARGER-ONLINE
+/charge/cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ
 /charge/DEMO-CHARGER-OFFLINE
 /charge/DEMO-CHARGER-MAINTENANCE
 /charge/DEMO-INVALID
 ```
+
+## Production QR Code
+
+Default machine QR target:
+
+```text
+https://charging-customer-web.vercel.app/charge/cmsqr_dVkGhCMkpUw2wAh5ZkSGHU_D5FbncfcQ
+```
+
+Generated QR asset:
+
+```text
+public/qr/charging-machine-001.svg
+```
+
+Regenerate the QR after changing the Vercel domain:
+
+```bash
+PUBLIC_CUSTOMER_SITE_URL=https://your-vercel-domain.vercel.app npm run qr:generate
+```
+
+Use a unique, random QR token per physical machine.
+
+For the current sticker/demo flow on Vercel, set:
+
+```bash
+NEXT_PUBLIC_USE_MOCK_API=true
+```
+
+This keeps the customer flow simple: scan QR, tap Start charging, choose TZS
+200 or TZS 500, select Fake Money, tap Pay, then see Payment accepted.
 
 ## Commands
 
@@ -45,6 +76,7 @@ npm run test
 npm run test:e2e
 npm run build
 npm run check:lines
+npm run qr:generate
 ```
 
 ## Remote API

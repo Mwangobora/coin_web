@@ -5,7 +5,7 @@ import type {
   SessionStatus,
 } from "@/features/payments/types/payment.types";
 
-const CONFIRM_AFTER_MS = 6_000;
+const CONFIRM_AFTER_MS = 900;
 const ACCESS_CODE_TTL_MS = 15 * 60 * 1000;
 
 type MockPayment = {
@@ -19,7 +19,10 @@ type MockPayment = {
 };
 
 const payments = new Map<string, MockPayment>();
-const sessions = new Map<string, { paymentReference: string; startedAt: number }>();
+const sessions = new Map<
+  string,
+  { paymentReference: string; startedAt: number }
+>();
 
 export function mockInitiatePayment(input: {
   checkoutToken: string;
@@ -36,7 +39,7 @@ export function mockInitiatePayment(input: {
     merchantReference: `QR-${paymentReference}`,
     amountMinor: price,
     currency: "TZS",
-    provider: "mock",
+    provider: "fake-money",
     paymentInstructions: { qrReference: `mock://pay/${paymentReference}` },
     status: "pending",
     expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
@@ -101,7 +104,9 @@ export function mockClaimAccessCode(
     portNumber: 1,
     accessCode: String(Math.floor(1000 + (Date.now() % 9000))),
     chargingDurationSeconds: record.packageId === "STANDARD-500" ? 2700 : 900,
-    accessCodeExpiresAt: new Date(Date.now() + ACCESS_CODE_TTL_MS).toISOString(),
+    accessCodeExpiresAt: new Date(
+      Date.now() + ACCESS_CODE_TTL_MS,
+    ).toISOString(),
     instructions: [
       "Enter this code on the charging machine keypad.",
       "Place the phone inside the displayed locker.",
@@ -118,7 +123,11 @@ export function mockGetSessionStatus(
     (item) => item.sessionReference === sessionReference,
   );
   const session = sessions.get(sessionReference);
-  if (!record || !session || record.initiation.customerFlowToken !== flowToken) {
+  if (
+    !record ||
+    !session ||
+    record.initiation.customerFlowToken !== flowToken
+  ) {
     throw notFound();
   }
   const durationSeconds = record.packageId === "STANDARD-500" ? 2700 : 900;
@@ -133,7 +142,8 @@ export function mockGetSessionStatus(
     portNumber: 1,
     stationName: "DIT Main Station",
     deviceName: "Smart Mobile Charger",
-    packageName: record.packageId === "STANDARD-500" ? "Standard Charge" : "Quick Charge",
+    packageName:
+      record.packageId === "STANDARD-500" ? "Standard Charge" : "Quick Charge",
     amountPaid: record.amountMinor,
     currency: record.currency,
     purchasedDurationSeconds: durationSeconds,
