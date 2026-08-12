@@ -3,8 +3,8 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const steps = [
-  "Select package",
-  "Choose Fake Money",
+  "Select amount",
+  "Choose payment method",
   "Tap Pay",
   "Payment accepted",
 ];

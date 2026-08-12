@@ -20,6 +20,7 @@ export async function initiatePayment(input: {
   checkoutToken: string;
   packageId: string;
   idempotencyKey: string;
+  paymentMethod: string;
 }) {
   if (env.NEXT_PUBLIC_USE_MOCK_API) {
     await delay();
@@ -28,7 +29,11 @@ export async function initiatePayment(input: {
   try {
     const response = await apiClient.post(
       "/public/charging/payments",
-      { packageId: input.packageId, idempotencyKey: input.idempotencyKey },
+      {
+        packageId: input.packageId,
+        idempotencyKey: input.idempotencyKey,
+        paymentMethod: input.paymentMethod,
+      },
       { headers: { [CHECKOUT_TOKEN_HEADER]: input.checkoutToken } },
     );
     return paymentInitiationSchema.parse(response.data);

@@ -13,6 +13,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "qr:generate": "node scripts/generate-public-qr.mjs",
+    "qr:pdf": "node scripts/generate-qr-pdf.mjs",
     "check:lines": "node scripts/check-file-lines.mjs",
     "verify": "npm run lint && npm run format:check && npm run typecheck && npm run check:lines && npm run test"
   },

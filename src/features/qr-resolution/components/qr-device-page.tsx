@@ -77,7 +77,8 @@ export function QrDevicePage({
               Start charging from this machine
             </h2>
             <p className="mt-2 text-sm leading-6 text-muted-foreground">
-              Tap start, choose TZS 200 or TZS 500, then pay using Fake Money.
+              Tap start, choose TZS 200 or TZS 500, then select your payment
+              method.
             </p>
             <Button
               className="mt-5 w-full"

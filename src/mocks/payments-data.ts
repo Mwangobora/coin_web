@@ -5,7 +5,7 @@ import type {
   SessionStatus,
 } from "@/features/payments/types/payment.types";
 
-const CONFIRM_AFTER_MS = 900;
+const CONFIRM_AFTER_MS = 0;
 const ACCESS_CODE_TTL_MS = 15 * 60 * 1000;
 
 type MockPayment = {
@@ -27,6 +27,7 @@ const sessions = new Map<
 export function mockInitiatePayment(input: {
   checkoutToken: string;
   packageId: string;
+  paymentMethod: string;
 }): PaymentInitiation {
   if (input.checkoutToken !== "mock-checkout-token") {
     throw invalidCheckout();
@@ -39,9 +40,9 @@ export function mockInitiatePayment(input: {
     merchantReference: `QR-${paymentReference}`,
     amountMinor: price,
     currency: "TZS",
-    provider: "fake-money",
-    paymentInstructions: { qrReference: `mock://pay/${paymentReference}` },
-    status: "pending",
+    provider: input.paymentMethod,
+    paymentInstructions: { qrReference: paymentReference },
+    status: "confirmed",
     expiresAt: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
     customerFlowToken: `mock-flow-${paymentReference}`,
   };

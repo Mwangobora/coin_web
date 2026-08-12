@@ -57,14 +57,14 @@ PUBLIC_CUSTOMER_SITE_URL=https://your-vercel-domain.vercel.app npm run qr:genera
 
 Use a unique, random QR token per physical machine.
 
-For the current sticker/demo flow on Vercel, set:
+For the current sticker flow on Vercel, set:
 
 ```bash
 NEXT_PUBLIC_USE_MOCK_API=true
 ```
 
 This keeps the customer flow simple: scan QR, tap Start charging, choose TZS
-200 or TZS 500, select Fake Money, tap Pay, then see Payment accepted.
+200 or TZS 500, select a payment method, tap Pay, then see Payment accepted.
 
 ## Commands
 

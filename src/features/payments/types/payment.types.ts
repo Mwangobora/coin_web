@@ -10,6 +10,9 @@ export type PaymentInitiation = {
   customerFlowToken: string;
 };
 
+export type PublicPaymentMethod =
+  "mpesa" | "mixx_by_yas" | "airtel_money" | "halopesa";
+
 export type PaymentStatus = {
   paymentReference: string;
   status: "pending" | "confirmed" | "failed" | "expired" | string;

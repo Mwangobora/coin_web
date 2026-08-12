@@ -13,7 +13,7 @@ NEXT_PUBLIC_API_BASE_URL=https://api.example.com/api/v1
 NEXT_PUBLIC_USE_MOCK_API=false
 ```
 
-Use mock mode for demos that should not call the backend:
+Use mock mode for offline presentations that should not call the backend:
 
 ```bash
 NEXT_PUBLIC_USE_MOCK_API=true

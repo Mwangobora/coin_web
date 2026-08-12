@@ -30,7 +30,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-test("shows fake money processing while pending", async () => {
+test("shows processing while pending", async () => {
   saveCheckoutFlow(initiation());
   mocks.usePaymentStatus.mockReturnValue({
     data: { status: "pending" },
@@ -45,9 +45,7 @@ test("shows fake money processing while pending", async () => {
   );
 
   expect(await screen.findByText("TZS 200")).toBeInTheDocument();
-  expect(
-    screen.getByText(/processing fake money payment/i),
-  ).toBeInTheDocument();
+  expect(screen.getByText(/processing payment/i)).toBeInTheDocument();
 });
 
 test("shows accepted message once payment is confirmed", async () => {
@@ -65,7 +63,9 @@ test("shows accepted message once payment is confirmed", async () => {
   );
 
   expect(screen.getByText(/payment accepted/i)).toBeInTheDocument();
-  expect(screen.getByText(/fake money payment received/i)).toBeInTheDocument();
+  expect(
+    screen.getByText(/payment received successfully/i),
+  ).toBeInTheDocument();
   expect(mocks.replace).not.toHaveBeenCalled();
 });
 
@@ -90,9 +90,9 @@ function initiation(): PaymentInitiation {
     merchantReference: "QR-PAY-1",
     amountMinor: "200",
     currency: "TZS",
-    provider: "fake-money",
-    paymentInstructions: { qrReference: "mock://pay/PAY-1" },
-    status: "pending",
+    provider: "mpesa",
+    paymentInstructions: { qrReference: "PAY-1" },
+    status: "confirmed",
     expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString(),
     customerFlowToken: "flow-token-1",
   };

@@ -26,20 +26,21 @@ test("package cards render and allow one selected package", async () => {
 
   expect(screen.getByText("TZS 200")).toBeInTheDocument();
   expect(screen.getByText("TZS 500")).toBeInTheDocument();
-  expect(
-    screen.getByRole("button", { name: /select charging time/i }),
-  ).toBeDisabled();
+  expect(screen.getByRole("button", { name: /select amount/i })).toBeDisabled();
 
   await userEvent.click(standard);
 
   expect(quick).toHaveAttribute("aria-pressed", "false");
   expect(standard).toHaveAttribute("aria-pressed", "true");
-  expect(screen.getByRole("button", { name: /fake money/i })).toBeVisible();
+  expect(screen.getByRole("button", { name: /m-pesa/i })).toBeVisible();
+  expect(screen.getByRole("button", { name: /mixx by yas/i })).toBeVisible();
+  expect(screen.getByRole("button", { name: /airtel money/i })).toBeVisible();
+  expect(screen.getByRole("button", { name: /halopesa/i })).toBeVisible();
   expect(
     screen.getByRole("button", { name: /select payment method/i }),
   ).toBeDisabled();
 
-  await userEvent.click(screen.getByRole("button", { name: /fake money/i }));
+  await userEvent.click(screen.getByRole("button", { name: /m-pesa/i }));
 
   expect(screen.getByRole("button", { name: /pay tzs 500/i })).toBeEnabled();
 });
@@ -56,9 +57,7 @@ test("disabled packages cannot be selected or continued", () => {
   );
 
   expect(screen.getByRole("button", { name: /quick charge/i })).toBeDisabled();
-  expect(
-    screen.getByRole("button", { name: /select charging time/i }),
-  ).toBeDisabled();
+  expect(screen.getByRole("button", { name: /select amount/i })).toBeDisabled();
   expect(screen.getByText(/currently offline/i)).toBeInTheDocument();
 });
 

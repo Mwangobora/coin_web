@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 
 const steps = [
   "Scan the QR code on the machine.",
-  "Choose how long you want to charge.",
-  "Select Fake Money and tap Pay.",
-  "Payment accepted. Charging starts.",
+  "Tap Start charging.",
+  "Select Amount to pay.",
+  "Choose payment method and tap Pay.",
 ];
 
 const permanentChargePath =

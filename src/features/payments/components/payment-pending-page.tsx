@@ -108,7 +108,7 @@ export function PaymentPendingPage({
             <CheckCircle2 size={42} />
             <h1 className="text-2xl font-black">Payment accepted</h1>
             <p className="text-sm leading-6">
-              Fake Money payment received. Your charging request is confirmed.
+              Payment received successfully. Your charging request is confirmed.
             </p>
           </section>
         ) : (
@@ -117,7 +117,7 @@ export function PaymentPendingPage({
             aria-live="polite"
           >
             <LoaderCircle className="animate-spin text-primary" size={18} />
-            Processing Fake Money payment...
+            Processing payment...
           </section>
         )}
 
