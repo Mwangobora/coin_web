@@ -2,23 +2,23 @@ import type { QrResolution } from "@/features/qr-resolution/types/qr-resolution.
 
 const packages = [
   {
-    publicPackageId: "QUICK-500",
+    publicPackageId: "QUICK-200",
     name: "Quick Charge",
     description: "Good for a short top up while you wait.",
-    priceMinor: "500",
+    priceMinor: "200",
     currency: "TZS",
-    durationSeconds: 30 * 60,
+    durationSeconds: 15 * 60,
     displayOrder: 1,
-    recommended: true,
   },
   {
-    publicPackageId: "STANDARD-1000",
+    publicPackageId: "STANDARD-500",
     name: "Standard Charge",
     description: "A longer charge for everyday use.",
-    priceMinor: "1000",
+    priceMinor: "500",
     currency: "TZS",
-    durationSeconds: 60 * 60,
+    durationSeconds: 45 * 60,
     displayOrder: 2,
+    recommended: true,
   },
 ];
 

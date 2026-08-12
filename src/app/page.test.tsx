@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { expect, test } from "vitest";
 
-import HomePage, { shouldShowDemoLinks } from "./page";
+import HomePage from "./page";
 
 test("root page renders without authentication or admin navigation", () => {
   render(<HomePage />);
@@ -17,7 +17,10 @@ test("root page renders without authentication or admin navigation", () => {
   expect(screen.queryByText(/admin dashboard/i)).not.toBeInTheDocument();
 });
 
-test("demo links are hidden in production", () => {
-  expect(shouldShowDemoLinks("production")).toBe(false);
-  expect(shouldShowDemoLinks("development")).toBe(true);
+test("demo links are not rendered on the landing page", () => {
+  render(<HomePage />);
+
+  expect(screen.queryByText(/online demo/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/offline demo/i)).not.toBeInTheDocument();
+  expect(screen.queryByText(/maintenance demo/i)).not.toBeInTheDocument();
 });

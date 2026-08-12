@@ -32,7 +32,7 @@ export function ChargingPackageCard({
       className={cn(
         "min-h-32 w-full rounded-2xl border bg-card p-4 text-left shadow-sm transition",
         "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-        selected && "border-primary bg-blue-50 ring-2 ring-primary/20",
+        selected && "border-primary bg-accent ring-2 ring-primary/20",
         disabled && "cursor-not-allowed opacity-55",
         !disabled && "hover:border-primary hover:shadow-md",
       )}

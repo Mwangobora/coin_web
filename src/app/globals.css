@@ -6,22 +6,22 @@
   --foreground: #172033;
   --card: #ffffff;
   --card-foreground: #172033;
-  --primary: #0f62fe;
-  --primary-hover: #0043ce;
+  --primary: #f97316;
+  --primary-hover: #ea580c;
   --primary-foreground: #ffffff;
-  --secondary: #e8f0ff;
-  --secondary-foreground: #0f3b77;
+  --secondary: #e4e4e7;
+  --secondary-foreground: #27272a;
   --muted: #eef2f7;
   --muted-foreground: #64748b;
-  --accent: #dcfce7;
-  --accent-foreground: #166534;
+  --accent: #ffedd5;
+  --accent-foreground: #c2410c;
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --warning: #f59e0b;
   --warning-foreground: #422006;
   --border: #d7dee9;
   --input: #cbd5e1;
-  --ring: #0f62fe;
+  --ring: #f97316;
 }
 
 @theme inline {
@@ -50,12 +50,20 @@ html {
   background: var(--background);
 }
 
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--border);
+  }
+}
+
 body {
   min-width: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at top left, #dbeafe 0, transparent 34rem),
-    linear-gradient(180deg, #f8fbff 0%, var(--background) 44%);
+    radial-gradient(circle at top left, #ffedd5 0, transparent 34rem),
+    linear-gradient(180deg, #fffaf5 0%, var(--background) 44%);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }

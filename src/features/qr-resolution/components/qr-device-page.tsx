@@ -83,6 +83,8 @@ export function QrDevicePage({ qrToken }: { qrToken: string }) {
         <DeviceUnavailableState state={state} />
         <CustomerSteps />
         <PackageSelectionList
+          qrToken={qrToken}
+          checkoutToken={data.checkoutToken}
           packages={data.packages}
           disabled={packageDisabled}
           disabledReason={packageDisabled ? statusMessage : undefined}

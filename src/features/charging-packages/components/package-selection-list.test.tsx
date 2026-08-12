@@ -1,12 +1,25 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
+
+import { render } from "@/test/test-utils";
 
 import type { ChargingPackage } from "../types/charging-package.types";
 import { PackageSelectionList } from "./package-selection-list";
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
+}));
+
 test("package cards render and allow one selected package", async () => {
-  render(<PackageSelectionList packages={packages} disabled={false} />);
+  render(
+    <PackageSelectionList
+      qrToken="DEMO-CHARGER-ONLINE"
+      checkoutToken="mock-checkout-token"
+      packages={packages}
+      disabled={false}
+    />,
+  );
 
   const quick = screen.getByRole("button", { name: /quick charge/i });
   const standard = screen.getByRole("button", { name: /standard charge/i });
@@ -24,6 +37,8 @@ test("package cards render and allow one selected package", async () => {
 test("disabled packages cannot be selected or continued", () => {
   render(
     <PackageSelectionList
+      qrToken="DEMO-CHARGER-ONLINE"
+      checkoutToken="mock-checkout-token"
       packages={packages}
       disabled
       disabledReason="This charging machine is currently offline."

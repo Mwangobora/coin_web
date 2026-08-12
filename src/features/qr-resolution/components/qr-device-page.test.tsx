@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { expect, test, vi } from "vitest";
+
+import { render } from "@/test/test-utils";
 
 import type { QrResolution } from "../types/qr-resolution.types";
 import { QrDevicePage } from "./qr-device-page";
@@ -8,6 +10,10 @@ const mocks = vi.hoisted(() => ({ useQrResolution: vi.fn() }));
 
 vi.mock("../hooks/use-qr-resolution", () => ({
   useQrResolution: () => mocks.useQrResolution(),
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn() }),
 }));
 
 test("QR route displays resolved station and device information", () => {
