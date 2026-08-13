@@ -8,7 +8,7 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse({
   NEXT_PUBLIC_API_BASE_URL:
     process.env.NEXT_PUBLIC_API_BASE_URL ??
-    "https://chronic-hundred-potato-environment.trycloudflare.com/api/v1",
+    "https://all-lambda-learning-encryption.trycloudflare.com/api/v1",
   NEXT_PUBLIC_USE_MOCK_API:
     process.env.NEXT_PUBLIC_USE_MOCK_API?.toLowerCase() === "true",
 });
