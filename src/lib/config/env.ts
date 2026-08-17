@@ -8,7 +8,7 @@ const envSchema = z.object({
 const parsed = envSchema.safeParse({
   NEXT_PUBLIC_API_BASE_URL:
     process.env.NEXT_PUBLIC_API_BASE_URL ??
-    "https://features-exceed-causes-circus.trycloudflare.com/api/v1",
+    "https://jackets-rosa-cache-talk.trycloudflare.com/api/v1",
   NEXT_PUBLIC_USE_MOCK_API:
     process.env.NEXT_PUBLIC_USE_MOCK_API?.toLowerCase() === "true",
 });
